@@ -38,11 +38,17 @@ from django.http import JsonResponse
 def caesar_cipher_view(request):
     result = None
     opposite_result = None
-    steps = []
-    opposite_steps = []
     operation_label = None
     opposite_operation_label = None
     data_label = None
+
+    # Caesar cipher explanation text
+    caesar_explanation = """
+    The Caesar Cipher is a substitution cipher where each letter in the plaintext is replaced by a letter with a fixed number of positions down or up the alphabet. 
+    For example, with a shift of 3:
+    A becomes D, B becomes E, C becomes F, and so on. 
+    The cipher works by rotating the alphabet, so when the shift goes beyond 'Z', it starts from 'A' again.
+    """
 
     if request.method == "POST":
         text = request.POST.get("text", "").strip()
@@ -57,21 +63,22 @@ def caesar_cipher_view(request):
                 "text": text,
                 "shift": shift_raw,
                 "cipher": cipher,
-                "operation": operation
+                "operation": operation,
+                "caesar_explanation": caesar_explanation  # Pass the explanation to the template
             })
         
         shift = int(shift_raw)
 
         if cipher == "caesar":
             if operation == "encrypt":
-                result, steps = caesar_encrypt_with_steps(text, shift)
-                opposite_result, opposite_steps = caesar_decrypt_with_steps(result, shift)
+                result, _ = caesar_encrypt_with_steps(text, shift)
+                opposite_result, _ = caesar_decrypt_with_steps(result, shift)
                 operation_label = "Encryption"
                 opposite_operation_label = "Decryption"
                 data_label = f"Data to be decrypted: {result}"
             elif operation == "decrypt":
-                result, steps = caesar_decrypt_with_steps(text, shift)
-                opposite_result, opposite_steps = caesar_encrypt_with_steps(result, shift)
+                result, _ = caesar_decrypt_with_steps(text, shift)
+                opposite_result, _ = caesar_encrypt_with_steps(result, shift)
                 operation_label = "Decryption"
                 opposite_operation_label = "Encryption"
                 data_label = f"Data to be encrypted: {result}"
@@ -86,12 +93,12 @@ def caesar_cipher_view(request):
             "data_label": data_label,
             "result": result,
             "opposite_result": opposite_result,
-            "steps": steps,
-            "opposite_steps": opposite_steps
+            "caesar_explanation": caesar_explanation  # Pass explanation
         })
 
-    return render(request, "ciphers/caesar_cipher.html")
-
+    return render(request, "ciphers/caesar_cipher.html", {
+        "caesar_explanation": caesar_explanation  # Pass explanation in case no POST request
+    })
 
 
 def caesar_encrypt_with_steps(text, shift):
