@@ -1,0 +1,228 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Development Team</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(to bottom, #e6f3ff, white);
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 16px;
+        }
+        header {
+            background-color: rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(8px);
+            border-bottom: 1px solid #e0e7ff;
+        }
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 64px;
+        }
+        nav {
+            display: flex;
+            align-items: center;
+        }
+        nav a {
+            color: #1e3a8a;
+            font-size: 14px;
+            font-weight: 500;
+            margin-right: 24px;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        nav a:hover {
+            color: #2563eb;
+        }
+        nav button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 4px;
+        }
+
+        main {
+            padding: 32px 0;
+        }
+        .team-container {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr); /* 4 columns per row */
+            gap: 20px;
+            justify-content: center;
+        }
+        .team-card {
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s;
+        }
+        .team-card:hover {
+            transform: scale(1.05);
+        }
+        .team-photo {
+            border-radius: 50%;
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            margin-bottom: 10px;
+        }
+        .team-name {
+            font-size: 1.2em;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        .team-role {
+            font-size: 1em;
+            color: #666;
+            margin-bottom: 10px;
+        }
+        .address {
+            font-size: 1em;
+            margin-bottom: 5px;
+        }
+        .team-contact {
+            color: #2563eb;
+            text-decoration: none;
+            font-size: 0.9em;
+        }
+        .team-contact:hover {
+            text-decoration: underline;
+        }
+        .center-container {
+            display: flex;
+            justify-content: center;   /* Centers horizontally */
+            align-items: center;       /* Centers vertically */
+            margin-bottom: 20px;
+        }
+
+        span {
+            font-size: 24px;           /* Example styling */
+            font-weight: bold;
+        }
+        
+        
+    </style>
+</head>
+<body>
+
+    <main> 
+        <div class="center-container">
+            <span>Meet the Team!</span>
+        </div>
+        <section class="team-container">
+                
+            <!-- Team Member 1 -->
+            <div class="team-card">
+                <img src="{% static 'images/sej.png' %}"  class="team-photo">
+                <div class="team-name">Jess Anthony Tahil</div>
+                <div class="team-role">Web Developer| Python Enthusiast</div>
+                <div class="address">mantalongon, Dalaguete, Cebu</div>
+                <a href="mailto:johndoe@example.com" class="team-contact">jessanthony.tahil10@gmail.com</a>
+            </div>
+
+            <!-- Team Member 2 -->
+            <div class="team-card">
+                <img src="{% static 'images/jecel.jpg' %}"  class="team-photo">
+                <div class="team-name">Jecel B. Carillo</div>
+                <div class="team-role">Frontend Developer</div>
+                <div class="address">Cansuje, Argao, Cebu</div>
+                <a href="mailto:carillojecel@gmail.com" class="team-contact">carillojecel@gmail.com</a>
+            </div>
+
+            <!-- Team Member 3 -->
+            <div class="team-card">
+                <img src="{% static 'images/tebteb.jpg' %}"  class="team-photo">
+                <div class="team-name">Steven Carl P. Delos Reyes</div>
+                <div class="team-role">UI/UX Designer</div>
+                <div class="address">Jampang, Argao, Cebu</div>
+                <a href="mailto:stevendelosreyes123@gmail.com" class="team-contact">stevendelosreyes123@gmail.com</a>
+            </div>
+
+            <!-- Team Member 4 -->
+            <div class="team-card">
+                <img src="{% static 'images/Stephanie.jpg' %}"  class="team-photo">
+                <div class="team-name">Stephanie Jane P. Lagoy</div>
+                <div class="team-role">UI/UX Designer</div>
+                <div class="address"> Colawin, Argao, Cebu</div>
+                <a href="mailto:slagoy31@gmail.com" class="team-contact">slagoy31@gmail.com</a>
+            </div>
+
+            <!-- Team Member 5 -->
+            <div class="team-card">
+                <img src="{% static 'images/jecel.jpg' %}"  class="team-photo">
+                <div class="team-name">Khent Lapina</div>
+                <div class="team-role">UI/UX Designer</div>
+                <div class="address"> Valladolid, Carcar, City</div>
+                <a href="mailto:khentlapina@gmail.com" class="team-contact">khentlapina@gmail.com</a>
+            </div>
+
+            <div class="team-card">
+                <img src="{% static 'images/jecel.jpg' %}"  class="team-photo">
+                <div class="team-name">Chesty Clint De Leon</div>
+                <div class="team-role">UI/UX Designer</div>
+                <div class="address"> Cebu</div>
+                <a href="mailto:alicejohnson@example.com" class="team-contact">alicejohnson@example.com</a>
+            </div>
+
+            <div class="team-card">
+                <img src="{% static 'images/jecel.jpg' %}"  class="team-photo">
+                <div class="team-name">Irene Carinoza</div>
+                <div class="team-role">UI/UX Designer</div>
+                <div class="address"> Cebu</div>
+                <a href="mailto:alicejohnson@example.com" class="team-contact">alicejohnson@example.com</a>
+            </div>
+
+            <div class="team-card">
+                <img src="{% static 'images/jecel.jpg' %}"  class="team-photo">
+                <div class="team-name">Gideon James Heredia</div>
+                <div class="team-role">UI/UX Designer</div>
+                <div class="address"> Cebu</div>
+                <a href="mailto:alicejohnson@example.com" class="team-contact">alicejohnson@example.com</a>
+            </div>
+
+            <div class="team-card">
+                <img src="{% static 'images/jecel.jpg' %}"  class="team-photo">
+                <div class="team-name">Jericho D. Sosas</div>
+                <div class="team-role">UI/UX Designer</div>
+                <div class="address">Taloot, Argao, Cebu</div>
+                <a href="mailto:sosasjericho23@gmail.com" class="team-contact">sosasjericho23@gmail.com</a>
+            </div>
+
+            <div class="team-card">
+                <img src="{% static 'images/jecel.jpg' %}"  class="team-photo">
+                <div class="team-name">Jhon Rheymark Reyes</div>
+                <div class="team-role">UI/UX Designer</div>
+                <div class="address"> Cebu</div>
+                <a href="mailto:alicejohnson@example.com" class="team-contact">alicejohnson@example.com</a>
+            </div>
+
+            <div class="team-card">
+                <img src="{% static 'images/bensing.jpg' %}"  class="team-photo">
+                <div class="team-name">Myra Jean Bensing</div>
+                <div class="team-role">UI/UX Designer</div>
+                <div class="address"> Cebu</div>
+                <a href="mailto:alicejohnson@example.com" class="team-contact">alicejohnson@example.com</a>
+            </div>
+            <!-- Add more team members here -->
+        </section>
+    </main>
+</body>
+</html>
+
+{% endblock %}

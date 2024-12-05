@@ -13,3 +13,5 @@ class CaesarCipherData(models.Model):
     def __str__(self):
         return f"{self.operation} at {self.timestamp}"
 
+
+
