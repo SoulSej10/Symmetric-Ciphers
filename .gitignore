@@ -1,5 +1,13 @@
+# Virtual environment
+venv/
+
+# Byte-compiled files
 __pycache__/
-db.sqlite3
 *.pyc
 *.pyo
+
+# Database files
+db.sqlite3
+
+# Logs
 *.log
