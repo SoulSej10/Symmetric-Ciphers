@@ -331,3 +331,7 @@ def vigenere_decrypt(ciphertext, keyword):
 #MARK: TEAM
 def myTeam(request):
     return render(request, "ciphers/my_team.html")
+
+#MARK: Home
+def home(request):
+    return render (request, "ciphers/home.html")

@@ -1,0 +1,276 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<title>Home</title>
+<style>
+    :root {
+        --primary-blue: #1e3a8a;
+        --hover-blue: #2563eb;
+        --bg-gradient: linear-gradient(135deg, #e6f3ff 0%, #ffffff 100%);
+        --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        --transition: all 0.3s ease;
+    }
+
+    body {
+        font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        margin: 0;
+        padding: 0;
+        background: var(--bg-gradient);
+        min-height: 100vh;
+        color: #333;
+    }
+
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 24px;
+    }
+
+    header {
+        background-color: rgba(255, 255, 255, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(30, 58, 138, 0.1);
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+    }
+
+    .header-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        height: 70px;
+    }
+
+    nav a {
+        color: var(--primary-blue);
+        font-size: 15px;
+        font-weight: 500;
+        margin-right: 28px;
+        text-decoration: none;
+        transition: var(--transition);
+        padding: 8px 16px;
+        border-radius: 6px;
+    }
+
+    nav a:hover {
+        color: var(--hover-blue);
+        background-color: rgba(37, 99, 235, 0.1);
+    }
+
+    main {
+        padding: 40px 0;
+    }
+
+    .page-title {
+        text-align: center;
+        margin-bottom: 48px;
+        font-size: 36px;
+        font-weight: 800;
+        background: linear-gradient(45deg, var(--primary-blue), var(--hover-blue));
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        animation: fadeIn 0.8s ease-out;
+    }
+
+    .team-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 32px;
+        padding: 0 16px;
+    }
+
+    .team-card {
+        background: rgba(255, 255, 255, 0.9);
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: var(--card-shadow);
+        transition: var(--transition);
+        border: 1px solid rgba(30, 58, 138, 0.1);
+    }
+
+    .team-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+    }
+
+    .card-link {
+        display: flex;
+        padding: 24px;
+        text-decoration: none;
+        color: inherit;
+        align-items: center;
+        gap: 20px;
+    }
+
+    .team-photo {
+        width: 120px;
+        height: 120px;
+        border-radius: 12px;
+        overflow: hidden;
+        background: #f8fafc;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .team-photo img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: var(--transition);
+    }
+
+    .team-card:hover .team-photo img {
+        transform: scale(1.05);
+    }
+
+    .team-info {
+        flex: 1;
+    }
+
+    .team-name {
+        font-size: 20px;
+        font-weight: 700;
+        color: var(--primary-blue);
+        margin-bottom: 8px;
+    }
+
+    .team-role {
+        font-size: 16px;
+        color: #4b5563;
+        margin-bottom: 6px;
+    }
+
+    .address {
+        font-size: 14px;
+        color: #6b7280;
+        line-height: 1.5;
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @media (max-width: 768px) {
+        .team-container {
+            grid-template-columns: 1fr;
+            padding: 0 8px;
+        }
+
+        .card-link {
+            flex-direction: column;
+            text-align: center;
+        }
+
+        .team-photo {
+            margin: 0 auto;
+        }
+
+        .page-title {
+            font-size: 28px;
+        }
+    }
+</style>
+
+<main>
+    <div class="container">
+        <h1 class="page-title">Explore Symmetric Ciphers</h1>
+
+        <div class="team-container">
+            <!-- Panel 1: Caesar Cipher -->
+            <div class="team-card">
+                <a href="{% url 'caesar_cipher' %}" class="card-link">
+                    <div class="team-photo">
+                        <img src="{% static 'images/caesar.png' %}" alt="Caesar Cipher">
+                    </div>
+                    <div class="team-info">
+                        <div class="team-name">Caesar Cipher</div>
+                        <div class="team-role">Substitution Cipher</div>
+                        <div class="address">Shift-based encryption</div>
+                    </div>
+                </a>
+            </div>
+
+            <!-- Panel 2: Vigenère Cipher -->
+            <div class="team-card">
+                <a href="{% url 'vigenere' %}" class="card-link">
+                    <div class="team-photo">
+                        <img src="{% static 'images/vigenere.png' %}" alt="Vigenère Cipher">
+                    </div>
+                    <div class="team-info">
+                        <div class="team-name">Vigenère Cipher</div>
+                        <div class="team-role">Polyalphabetic Cipher</div>
+                        <div class="address">Keyword-based encryption</div>
+                    </div>
+                </a>
+            </div>
+
+            <!-- Panel 3: Playfair Cipher -->
+            <div class="team-card">
+                <a href="" class="card-link">
+                    <div class="team-photo">
+                        <img src="{% static 'images/playfair.png' %}" alt="Playfair Cipher">
+                    </div>
+                    <div class="team-info">
+                        <div class="team-name">Playfair Cipher</div>
+                        <div class="team-role">Digraph Cipher</div>
+                        <div class="address">Encrypts pairs of letters</div>
+                    </div>
+                </a>
+            </div>
+
+            <!-- Panel 4: Single Columnar Cipher -->
+            <div class="team-card">
+                <a href="" class="card-link">
+                    <div class="team-photo">
+                        <img src="{% static 'images/single_columnar.png' %}" alt="Single Columnar Cipher">
+                    </div>
+                    <div class="team-info">
+                        <div class="team-name">Single Columnar Cipher</div>
+                        <div class="team-role">Transposition Cipher</div>
+                        <div class="address">Uses a single column for encryption</div>
+                    </div>
+                </a>
+            </div>
+
+            <!-- Panel 5: Double Columnar Cipher -->
+            <div class="team-card">
+                <a href="" class="card-link">
+                    <div class="team-photo">
+                        <img src="{% static 'images/double_columnar.png' %}" alt="Double Columnar Cipher">
+                    </div>
+                    <div class="team-info">
+                        <div class="team-name">Double Columnar Cipher</div>
+                        <div class="team-role">Transposition Cipher</div>
+                        <div class="address">Two-column transposition for encryption</div>
+                    </div>
+                </a>
+            </div>
+
+            <!-- Panel 6: AES -->
+            <div class="team-card">
+                <a href="" class="card-link">
+                    <div class="team-photo">
+                        <img src="{% static 'images/aes.png' %}" alt="AES (Advanced Encryption Standard)">
+                    </div>
+                    <div class="team-info">
+                        <div class="team-name">AES</div>
+                        <div class="team-role">Symmetric Key Algorithm</div>
+                        <div class="address">Widely used encryption standard</div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock %}

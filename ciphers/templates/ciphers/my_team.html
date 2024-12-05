@@ -4,225 +4,288 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Development Team</title>
     <style>
+        :root {
+            --primary-blue: #1e3a8a;
+            --hover-blue: #2563eb;
+            --bg-gradient: linear-gradient(135deg, #e6f3ff 0%, #ffffff 100%);
+            --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            --transition: all 0.3s ease;
+        }
+
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
             margin: 0;
             padding: 0;
-            background: linear-gradient(to bottom, #e6f3ff, white);
+            background: var(--bg-gradient);
             min-height: 100vh;
+            color: #333;
         }
+
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 16px;
+            padding: 24px;
         }
+
         header {
-            background-color: rgba(255, 255, 255, 0.5);
-            backdrop-filter: blur(8px);
-            border-bottom: 1px solid #e0e7ff;
+            background-color: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(30, 58, 138, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
         }
+
         .header-content {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            height: 64px;
+            height: 70px;
         }
+
         nav {
             display: flex;
             align-items: center;
         }
+
         nav a {
-            color: #1e3a8a;
-            font-size: 14px;
+            color: var(--primary-blue);
+            font-size: 15px;
             font-weight: 500;
-            margin-right: 24px;
+            margin-right: 28px;
             text-decoration: none;
-            transition: color 0.3s ease;
+            transition: var(--transition);
+            padding: 8px 16px;
+            border-radius: 6px;
         }
+
         nav a:hover {
-            color: #2563eb;
-        }
-        nav button {
-            background: none;
-            border: none;
-            cursor: pointer;
-            padding: 4px;
+            color: var(--hover-blue);
+            background-color: rgba(37, 99, 235, 0.1);
         }
 
         main {
-            padding: 32px 0;
-        }
-        .team-container {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr); /* 4 columns per row */
-            gap: 20px;
-            justify-content: center;
-        }
-        .team-card {
-            background-color: white;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            padding: 15px;
-            text-align: center;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            transition: transform 0.2s;
-        }
-        .team-card:hover {
-            transform: scale(1.05);
-        }
-        .team-photo {
-            border-radius: 50%;
-            width: 100px;
-            height: 100px;
-            object-fit: cover;
-            margin-bottom: 10px;
-        }
-        .team-name {
-            font-size: 1.2em;
-            font-weight: bold;
-            margin: 10px 0;
-        }
-        .team-role {
-            font-size: 1em;
-            color: #666;
-            margin-bottom: 10px;
-        }
-        .address {
-            font-size: 1em;
-            margin-bottom: 5px;
-        }
-        .team-contact {
-            color: #2563eb;
-            text-decoration: none;
-            font-size: 0.9em;
-        }
-        .team-contact:hover {
-            text-decoration: underline;
-        }
-        .center-container {
-            display: flex;
-            justify-content: center;   /* Centers horizontally */
-            align-items: center;       /* Centers vertically */
-            margin-bottom: 20px;
+            padding: 40px 0;
         }
 
-        span {
-            font-size: 24px;           /* Example styling */
-            font-weight: bold;
+        .page-title {
+            text-align: center;
+            margin-bottom: 48px;
+            font-size: 36px;
+            font-weight: 800;
+            background: linear-gradient(45deg, var(--primary-blue), var(--hover-blue));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: fadeIn 0.8s ease-out;
         }
-        
-        
+
+        .team-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 32px;
+            padding: 0 16px;
+        }
+
+        .team-card {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: var(--card-shadow);
+            transition: var(--transition);
+            border: 1px solid rgba(30, 58, 138, 0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 24px;
+        }
+
+        .team-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+        }
+
+        .team-photo {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 16px;
+            border: 4px solid white;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            transition: var(--transition);
+        }
+
+        .team-card:hover .team-photo {
+            transform: scale(1.05);
+        }
+
+        .team-name {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--primary-blue);
+            margin: 10px 0;
+        }
+
+        .team-role {
+            font-size: 16px;
+            color: #4b5563;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .address {
+            font-size: 14px;
+            color: #6b7280;
+            margin-bottom: 12px;
+            text-align: center;
+        }
+
+        .team-contact {
+            color: var(--hover-blue);
+            text-decoration: none;
+            font-size: 14px;
+            transition: var(--transition);
+            padding: 8px 16px;
+            border-radius: 20px;
+            background-color: rgba(37, 99, 235, 0.1);
+        }
+
+        .team-contact:hover {
+            background-color: var(--hover-blue);
+            color: white;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .team-container {
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            }
+
+            .page-title {
+                font-size: 28px;
+            }
+        }
     </style>
 </head>
 <body>
-
     <main> 
-        <div class="center-container">
-            <span>Meet the Team!</span>
-        </div>
+        <h1 class="page-title">Meet the Team!</h1>
         <section class="team-container">
-                
             <!-- Team Member 1 -->
             <div class="team-card">
-                <img src="{% static 'images/sej.png' %}"  class="team-photo">
+                <img src="{% static 'images/sej.png' %}" alt="Jess Anthony Tahil" class="team-photo">
                 <div class="team-name">Jess Anthony Tahil</div>
-                <div class="team-role">Web Developer| Python Enthusiast</div>
-                <div class="address">mantalongon, Dalaguete, Cebu</div>
-                <a href="mailto:johndoe@example.com" class="team-contact">jessanthony.tahil10@gmail.com</a>
+                <div class="team-role">Web Developer | Python Enthusiast</div>
+                <div class="address">Mantalongon, Dalaguete, Cebu</div>
+                <a href="mailto:jessanthony.tahil10@gmail.com" class="team-contact">Contact</a>
             </div>
 
             <!-- Team Member 2 -->
             <div class="team-card">
-                <img src="{% static 'images/jecel.jpg' %}"  class="team-photo">
+                <img src="{% static 'images/jecel.jpg' %}" alt="Jecel B. Carillo" class="team-photo">
                 <div class="team-name">Jecel B. Carillo</div>
                 <div class="team-role">Frontend Developer</div>
                 <div class="address">Cansuje, Argao, Cebu</div>
-                <a href="mailto:carillojecel@gmail.com" class="team-contact">carillojecel@gmail.com</a>
+                <a href="mailto:carillojecel@gmail.com" class="team-contact">Contact</a>
             </div>
 
             <!-- Team Member 3 -->
             <div class="team-card">
-                <img src="{% static 'images/tebteb.jpg' %}"  class="team-photo">
+                <img src="{% static 'images/tebteb.jpg' %}" alt="Steven Carl P. Delos Reyes" class="team-photo">
                 <div class="team-name">Steven Carl P. Delos Reyes</div>
                 <div class="team-role">UI/UX Designer</div>
                 <div class="address">Jampang, Argao, Cebu</div>
-                <a href="mailto:stevendelosreyes123@gmail.com" class="team-contact">stevendelosreyes123@gmail.com</a>
+                <a href="mailto:stevendelosreyes123@gmail.com" class="team-contact">Contact</a>
             </div>
 
             <!-- Team Member 4 -->
             <div class="team-card">
-                <img src="{% static 'images/Stephanie.jpg' %}"  class="team-photo">
+                <img src="{% static 'images/Stephanie.jpg' %}" alt="Stephanie Jane P. Lagoy" class="team-photo">
                 <div class="team-name">Stephanie Jane P. Lagoy</div>
                 <div class="team-role">UI/UX Designer</div>
-                <div class="address"> Colawin, Argao, Cebu</div>
-                <a href="mailto:slagoy31@gmail.com" class="team-contact">slagoy31@gmail.com</a>
+                <div class="address">Colawin, Argao, Cebu</div>
+                <a href="mailto:slagoy31@gmail.com" class="team-contact">Contact</a>
             </div>
 
             <!-- Team Member 5 -->
             <div class="team-card">
-                <img src="{% static 'images/jecel.jpg' %}"  class="team-photo">
+                <img src="{% static 'images/jecel.jpg' %}" alt="Khent Lapina" class="team-photo">
                 <div class="team-name">Khent Lapina</div>
                 <div class="team-role">UI/UX Designer</div>
-                <div class="address"> Valladolid, Carcar, City</div>
-                <a href="mailto:khentlapina@gmail.com" class="team-contact">khentlapina@gmail.com</a>
+                <div class="address">Valladolid, Carcar City</div>
+                <a href="mailto:khentlapina@gmail.com" class="team-contact">Contact</a>
             </div>
 
+            <!-- Team Member 6 -->
             <div class="team-card">
-                <img src="{% static 'images/jecel.jpg' %}"  class="team-photo">
+                <img src="{% static 'images/jecel.jpg' %}" alt="Chesty Clint De Leon" class="team-photo">
                 <div class="team-name">Chesty Clint De Leon</div>
                 <div class="team-role">UI/UX Designer</div>
-                <div class="address"> Cebu</div>
-                <a href="mailto:alicejohnson@example.com" class="team-contact">alicejohnson@example.com</a>
+                <div class="address">Cebu</div>
+                <a href="mailto:chestyclint@example.com" class="team-contact">Contact</a>
             </div>
 
+            <!-- Team Member 7 -->
             <div class="team-card">
-                <img src="{% static 'images/jecel.jpg' %}"  class="team-photo">
+                <img src="{% static 'images/jecel.jpg' %}" alt="Irene Carinoza" class="team-photo">
                 <div class="team-name">Irene Carinoza</div>
                 <div class="team-role">UI/UX Designer</div>
-                <div class="address"> Cebu</div>
-                <a href="mailto:alicejohnson@example.com" class="team-contact">alicejohnson@example.com</a>
+                <div class="address">Cebu</div>
+                <a href="mailto:irenecarinoza@example.com" class="team-contact">Contact</a>
             </div>
 
+            <!-- Team Member 8 -->
             <div class="team-card">
-                <img src="{% static 'images/jecel.jpg' %}"  class="team-photo">
+                <img src="{% static 'images/jecel.jpg' %}" alt="Gideon James Heredia" class="team-photo">
                 <div class="team-name">Gideon James Heredia</div>
                 <div class="team-role">UI/UX Designer</div>
-                <div class="address"> Cebu</div>
-                <a href="mailto:alicejohnson@example.com" class="team-contact">alicejohnson@example.com</a>
+                <div class="address">Cebu</div>
+                <a href="mailto:gideonjames@example.com" class="team-contact">Contact</a>
             </div>
 
+            <!-- Team Member 9 -->
             <div class="team-card">
-                <img src="{% static 'images/jecel.jpg' %}"  class="team-photo">
+                <img src="{% static 'images/jecel.jpg' %}" alt="Jericho D. Sosas" class="team-photo">
                 <div class="team-name">Jericho D. Sosas</div>
                 <div class="team-role">UI/UX Designer</div>
                 <div class="address">Taloot, Argao, Cebu</div>
-                <a href="mailto:sosasjericho23@gmail.com" class="team-contact">sosasjericho23@gmail.com</a>
+                <a href="mailto:sosasjericho23@gmail.com" class="team-contact">Contact</a>
             </div>
 
+            <!-- Team Member 10 -->
             <div class="team-card">
-                <img src="{% static 'images/jecel.jpg' %}"  class="team-photo">
+                <img src="{% static 'images/jecel.jpg' %}" alt="Jhon Rheymark Reyes" class="team-photo">
                 <div class="team-name">Jhon Rheymark Reyes</div>
                 <div class="team-role">UI/UX Designer</div>
-                <div class="address"> Cebu</div>
-                <a href="mailto:alicejohnson@example.com" class="team-contact">alicejohnson@example.com</a>
+                <div class="address">Cebu</div>
+                <a href="mailto:jhonrheymark@example.com" class="team-contact">Contact</a>
             </div>
 
+            <!-- Team Member 11 -->
             <div class="team-card">
-                <img src="{% static 'images/bensing.jpg' %}"  class="team-photo">
+                <img src="{% static 'images/bensing.jpg' %}" alt="Myra Jean Bensing" class="team-photo">
                 <div class="team-name">Myra Jean Bensing</div>
                 <div class="team-role">UI/UX Designer</div>
-                <div class="address"> Cebu</div>
-                <a href="mailto:alicejohnson@example.com" class="team-contact">alicejohnson@example.com</a>
+                <div class="address">Cebu</div>
+                <a href="mailto:myrajean@example.com" class="team-contact">Contact</a>
             </div>
-            <!-- Add more team members here -->
         </section>
     </main>
 </body>
 </html>
-
 {% endblock %}

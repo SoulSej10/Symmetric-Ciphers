@@ -1,192 +1,206 @@
 {% extends 'base.html' %}
 {% load static %}
-<link rel="stylesheet" href="{% static 'styles/caesar_cipher.css' %}">
 
 {% block title %}Vigenère Cipher{% endblock %}
 
 {% block content %}
 <style>
-    .card {
-        max-width: 32rem;
-        margin: 0 auto;
-        background-color: white;
-        padding: 24px;
-        border-radius: 8px;
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    :root {
+        --primary: #2563eb;
+        --primary-dark: #1d4ed8;
+        --secondary: #1e40af;
+        --background: #f8faff;
+        --text: #1e3a8a;
+        --text-light: #4b5563;
+        --border: #e5e9f5;
+        --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        --transition: all 0.3s ease;
     }
+
+    body {
+        font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        background-color: var(--background);
+        color: var(--text);
+        line-height: 1.5;
+    }
+
+    .container {
+        max-width: 1200px;
+        margin: 2rem auto;
+        padding: 0 1rem;
+    }
+
+    .dual-container {
+        display: flex;
+        gap: 2rem;
+        flex-wrap: wrap;
+    }
+
+    .card {
+        background-color: white;
+        border-radius: 12px;
+        box-shadow: var(--shadow);
+        padding: 2rem;
+        flex: 1 1 400px;
+    }
+
     .card-header {
         text-align: center;
-        margin-bottom: 24px;
+        margin-bottom: 1.5rem;
     }
+
     .card-title {
-        font-size: 24px;
+        font-size: 1.5rem;
         font-weight: 700;
-        color: #1e3a8a;
-        margin-bottom: 4px;
+        color: var(--secondary);
+        margin-bottom: 0.5rem;
     }
+
     .card-description {
-        color: #2563eb;
-        font-size: 14px;
+        color: var(--primary);
+        font-size: 0.875rem;
     }
+
     .form-group {
-        margin-bottom: 16px;
+        margin-bottom: 1rem;
     }
+
     label {
         display: block;
-        font-size: 14px;
-        color: #1e3a8a;
+        font-size: 0.875rem;
         font-weight: 500;
-        margin-bottom: 4px;
+        margin-bottom: 0.5rem;
     }
+
     select, input, textarea {
-        width: 95%;
-        padding: 8px 12px;
-        border-radius: 4px;
-        border: 1px solid #d1d5db;
-        font-size: 14px;
-        transition: border-color 0.3s ease;
+        width: 100%;
+        padding: 0.75rem;
+        border-radius: 6px;
+        border: 1px solid var(--border);
+        font-size: 1rem;
+        transition: var(--transition);
     }
+
     select:focus, input:focus, textarea:focus {
         outline: none;
-        border-color: #2563eb;
-        box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
     }
+
     .button-group {
         display: flex;
-        gap: 16px;
-        margin-top: 24px;
+        gap: 1rem;
+        margin-top: 1.5rem;
     }
+
     button {
         flex: 1;
-        background-color: #2563eb;
+        background-color: var(--primary);
         color: white;
-        padding: 10px 16px;
-        border-radius: 4px;
+        padding: 0.75rem 1rem;
+        border-radius: 6px;
         border: none;
         cursor: pointer;
         font-weight: 600;
-        font-size: 14px;
-        transition: background-color 0.3s ease;
+        font-size: 1rem;
+        transition: var(--transition);
     }
+
     button:hover {
-        background-color: #1d4ed8;
+        background-color: var(--primary-dark);
     }
+
     button[value="decrypt"] {
         background-color: white;
-        color: #2563eb;
-        border: 1px solid #2563eb;
+        color: var(--primary);
+        border: 1px solid var(--primary);
     }
+
     button[value="decrypt"]:hover {
-        background-color: #eff6ff;
+        background-color: var(--background);
     }
+
     .result-box {
-        background-color: #eff6ff;
-        border: 1px solid #bfdbfe;
-        border-radius: 4px;
-        padding: 16px;
-        color: #1e3a8a;
-        min-height: 100px;
-        margin-top: 24px;
+        background: linear-gradient(135deg, #f1f5ff, #ffffff);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 1.5rem;
+        margin-top: 1.5rem;
     }
+
     .result-box h3 {
-        font-size: 16px;
+        font-size: 1.125rem;
         font-weight: 600;
         margin-top: 0;
-        margin-bottom: 8px;
-    }
-    .dual-container {
-        display: flex;
-        gap: 32px;
-    }
-    .card-left, .card-right {
-        flex: 1;
-    }
-    .card-right {
-        background: linear-gradient(to bottom, #ffffff, #f8faff);
-        border: 1px solid #e5e9f5;
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
-    .card-right:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 16px -4px rgba(37, 99, 235, 0.1);
-    }
-    .operation-label {
-        background-color: #f1f5ff;
-        border-radius: 6px;
-        padding: 16px;
-        margin: 20px 0;
-    }
-    .operation-label h3 {
-        color: #1e40af;
-        font-size: 18px;
-        margin: 0 0 8px 0;
-    }
-    .operation-label p {
-        color: #4b5563;
-        font-size: 14px;
-        margin: 0;
-    }
-    .step-by-step-process {
-        margin-top: 24px;
-        border-top: 1px solid #e5e9f5;
-        padding-top: 24px;
-    }
-    .step-by-step-process h3 {
-        color: #1e40af;
-        font-size: 18px;
-        margin: 0 0 16px 0;
-    }
-    #step-by-step-container p {
-        background-color: #ffffff;
-        border: 1px solid #e5e9f5;
-        border-radius: 4px;
-        padding: 12px;
-        margin: 8px 0;
-        color: #4b5563;
-        font-size: 14px;
-        transition: background-color 0.2s ease;
-    }
-    #step-by-step-container p:hover {
-        background-color: #f8faff;
-    }
-    .result-box {
-        background: linear-gradient(45deg, #f1f5ff, #ffffff);
-        border: 1px solid #bfdbfe;
-        border-radius: 6px;
-        padding: 20px;
-        margin: 16px 0;
-    }
-    .result-box h3 {
-        color: #1e40af;
-        font-size: 18px;
-        margin: 0 0 12px 0;
+        margin-bottom: 1rem;
         display: flex;
         align-items: center;
-        gap: 8px;
+        gap: 0.5rem;
     }
+
     .result-box h3::before {
         content: "";
         display: inline-block;
         width: 4px;
-        height: 16px;
-        background-color: #2563eb;
+        height: 1rem;
+        background-color: var(--primary);
         border-radius: 2px;
     }
+
     .result-box p {
-        color: #4b5563;
-        font-size: 15px;
-        line-height: 1.5;
-        margin: 0;
-        padding: 8px;
+        font-family: 'Fira Code', monospace;
         background-color: rgba(255, 255, 255, 0.5);
-        border-radius: 4px;
-        font-family: monospace;
+        padding: 1rem;
+        border-radius: 6px;
+        margin: 0;
+        word-break: break-all;
+    }
+
+    .operation-label {
+        background-color: var(--background);
+        border-radius: 8px;
+        padding: 1rem;
+        margin: 1.5rem 0;
+    }
+
+    .operation-label h3 {
+        color: var(--secondary);
+        font-size: 1.125rem;
+        margin: 0 0 0.5rem 0;
+    }
+
+    .operation-label p {
+        color: var(--text-light);
+        font-size: 0.875rem;
+        margin: 0;
+    }
+
+    .cipher-description {
+        margin-top: 1.5rem;
+    }
+
+    .cipher-description h3 {
+        color: var(--secondary);
+        font-size: 1.125rem;
+        margin-bottom: 1rem;
+    }
+
+    .cipher-description p {
+        color: var(--text-light);
+        font-size: 0.875rem;
+        margin-bottom: 1rem;
+    }
+
+    @media (max-width: 768px) {
+        .dual-container {
+            flex-direction: column;
+        }
     }
 </style>
 
 <div class="container">
     <div class="dual-container">
-        <div class="card card-left">
+        <div class="card">
             <div class="card-header">
                 <h1 class="card-title">Vigenère Symmetric Cipher</h1>
                 <p class="card-description">Encryption and Decryption</p>
@@ -223,8 +237,7 @@
             {% endif %}
         </div>
 
-        <!-- Second container for opposite operation result -->
-        <div class="card card-right">
+        <div class="card">
             <div class="card-header">
                 <h1 class="card-title">Opposite Operation</h1>
                 <p class="card-description">The result of the opposite operation</p>
@@ -232,7 +245,7 @@
         
             <div class="operation-label">
                 <h3 id="opposite-operation-label">{{ opposite_operation_label }}</h3>
-                <p id="data-label">{{ data_label }}: <strong><p> {{ result }}</p></strong> </p> 
+                <p id="data-label">{{ data_label }}</p>
             </div>
         
             <div class="result-box">
@@ -240,59 +253,46 @@
                 <p id="opposite-result">{{ opposite_result }}</p>
             </div>
         
-            <!-- How Vigenère Works? Description -->
             <div class="cipher-description">
                 <h3>How Vigenère Works</h3>
-                <p>The Vigenère cipher encrypts text using a keyword. Each letter in the plaintext is shifted by a number corresponding to the letter in the keyword. The keyword repeats until it matches the length of the message. 
-                For example, with the key "SAFE", the letter 'A' is shifted by 18 (since 'S' is the 19th letter) to become 'S'. This process is repeated for each letter in the message.</p>
-                <p>It’s more secure than a Caesar cipher because it uses varying shifts, making it harder to crack.</p>
-
+                <p>The Vigenère cipher encrypts text using a keyword. Each letter in the plaintext is shifted by a number corresponding to the letter in the keyword. The keyword repeats until it matches the length of the message.</p>
+                <p>For example, with the key "SAFE", the letter 'A' is shifted by 18 (since 'S' is the 19th letter) to become 'S'. This process is repeated for each letter in the message.</p>
+                <p>It's more secure than a Caesar cipher because it uses varying shifts, making it harder to crack.</p>
             </div>
         </div>
-        
     </div>
 </div>
 
 <script>
     function autoUpdate() {
-    const cipher = document.getElementById('cipher').value;
-    const operation = document.querySelector('button[type="submit"][name="operation"]').value;
-    const text = document.getElementById('text').value; // Get the text value for real-time update
-    const keyword = document.getElementById('keyword').value; // Get the keyword value
+        const cipher = document.getElementById('cipher').value;
+        const operation = document.querySelector('button[type="submit"][name="operation"]').value;
+        const text = document.getElementById('text').value;
+        const keyword = document.getElementById('keyword').value;
 
-    // Send the data to the server for the opposite result
-    fetch('/update_opposite_result/', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
-        },
-        body: JSON.stringify({ text, keyword, operation })
-    })
-    .then(response => response.json())
-    .then(data => {
-        // Update the second container with the response from the server
-        document.getElementById('opposite-operation-label').textContent = data.opposite_operation_label;
-        document.getElementById('data-label').textContent = data.data_label;
-        document.getElementById('opposite-result').textContent = data.result;
+        fetch('/update_opposite_result/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+            },
+            body: JSON.stringify({ text, keyword, operation })
+        })
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('opposite-operation-label').textContent = data.opposite_operation_label;
+            document.getElementById('data-label').textContent = data.data_label;
+            document.getElementById('opposite-result').textContent = data.result;
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
 
-        // Display the result of the first container in the second container
-        const resultLabel = document.createElement('p');
-        resultLabel.innerHTML = "<strong>Result of First Operation:</strong> " + data.result;
-        document.querySelector('.operation-label').appendChild(resultLabel);
-    })
-    .catch(error => {
-        console.error('Error:', error);
-    });
-
-    // Optionally, change the page URL based on the cipher
-    if (cipher === 'caesar') {
-        window.location.href = '/caesar/';
-    } else if (cipher === 'vigenere') {
-        window.location.href = '/vigenere/';
+        if (cipher === 'caesar') {
+            window.location.href = '/caesar/';
+        } else if (cipher === 'vigenere') {
+            window.location.href = '/vigenere/';
+        }
     }
-}
-
 </script>
-
 {% endblock %}
