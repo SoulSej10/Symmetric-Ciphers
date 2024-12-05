@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Symmetric Ciphers</title>
+    <style>
+        /* Global Styles */
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(to bottom, #e6f3ff, white);
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 16px;
+        }
+        header {
+            background-color: rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(8px);
+            border-bottom: 1px solid #e0e7ff;
+        }
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 64px;
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+        .logo svg {
+            width: 32px;
+            height: 32px;
+            color: #2563eb;
+        }
+        .logo span {
+            font-size: 20px;
+            font-weight: 600;
+            color: #1e3a8a;
+            margin-left: 8px;
+        }
+        nav {
+            display: flex;
+            align-items: center;
+        }
+        nav a {
+            color: #1e3a8a;
+            font-size: 14px;
+            font-weight: 500;
+            margin-right: 24px;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        nav a:hover {
+            color: #2563eb;
+        }
+        nav button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 4px;
+        }
+        main {
+            padding: 32px 0;
+        }
+        .card {
+            max-width: 32rem;
+            margin: 0 auto;
+            background-color: white;
+            padding: 24px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        .card-header {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+        .card-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1e3a8a;
+            margin-bottom: 4px;
+        }
+        .card-description {
+            color: #2563eb;
+            font-size: 14px;
+        }
+        .form-group {
+            margin-bottom: 16px;
+        }
+        label {
+            display: block;
+            font-size: 14px;
+            color: #1e3a8a;
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+        select, input, textarea {
+            width: 100%;
+            padding: 8px 12px;
+            border-radius: 4px;
+            border: 1px solid #d1d5db;
+            font-size: 14px;
+            transition: border-color 0.3s ease;
+        }
+        select:focus, input:focus, textarea:focus {
+            outline: none;
+            border-color: #2563eb;
+            box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+        }
+        .button-group {
+            display: flex;
+            gap: 16px;
+            margin-top: 24px;
+        }
+        button {
+            flex: 1;
+            background-color: #2563eb;
+            color: white;
+            padding: 10px 16px;
+            border-radius: 4px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 14px;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #1d4ed8;
+        }
+        button[value="decrypt"] {
+            background-color: white;
+            color: #2563eb;
+            border: 1px solid #2563eb;
+        }
+        button[value="decrypt"]:hover {
+            background-color: #eff6ff;
+        }
+        .result-box {
+            background-color: #eff6ff;
+            border: 1px solid #bfdbfe;
+            border-radius: 4px;
+            padding: 16px;
+            color: #1e3a8a;
+            min-height: 100px;
+            margin-top: 24px;
+        }
+        .result-box h3 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-top: 0;
+            margin-bottom: 8px;
+        }
+        .dual-container {
+            display: flex;
+            gap: 32px;
+        }
+        .card-left, .card-right {
+            flex: 1;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container header-content">
+            <div class="logo">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                </svg>
+                <span>CipherLab</span>
+            </div>
+            <nav>
+                <a href="#">Home</a>
+                <a href="#">The Team</a>
+                <button aria-label="User menu">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                    </svg>
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            <div class="dual-container">
+                <div class="card card-left">
+                    <div class="card-header">
+                        <h1 class="card-title">Symmetric Ciphers</h1>
+                        <p class="card-description">Encryption and Decryption</p>
+                    </div>
+                    {% if error %}
+                    <div class="error-message">
+                        <p>{{ error }}</p>
+                    </div>
+                    {% endif %}
+
+                    <form method="POST">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="cipher">Select Cipher</label>
+                            <select id="cipher" name="cipher" onchange="autoUpdate()">
+                                <option value="caesar" {% if cipher == "caesar" %}selected{% endif %}>Caesar Cipher</option>
+                                <option value="vigenere" {% if cipher == "vigenere" %}selected{% endif %}>Vigenère Cipher</option>
+                                <option value="playfair" {% if cipher == "playfair" %}selected{% endif %}>Playfair Cipher</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="text">Text</label>
+                            <textarea id="text" name="text" rows="4" required>{{ text|default:"" }}</textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="shift">Key</label>
+                            <input id="shift" name="shift" type="text" value="{{ shift|default:"" }}" required>
+                        </div>
+
+                        <div class="button-group">
+                            <button type="submit" name="operation" value="encrypt">Encrypt</button>
+                            <button type="submit" name="operation" value="decrypt">Decrypt</button>
+                        </div>
+                    </form>
+
+                    {% if result %}
+                        <div class="result-box">
+                            <h3>Result</h3>
+                            <p>{{ result }}</p>
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="card card-right">
+                    <div class="card-header">
+                        <h1 class="card-title">Opposite Operation</h1>
+                        <p class="card-description">The result of the opposite operation</p>
+                    </div>
+                
+                    <div class="operation-label">
+                        <h3 id="opposite-operation-label">{{ opposite_operation_label }}</h3>
+                        <p id="data-label">{{ data_label }}</p>
+                    </div>
+                
+                    <div class="result-box">
+                        <h3>Result</h3>
+                        <p id="opposite-result">{{ opposite_result }}</p>
+                    </div>
+                
+                    <div class="step-by-step-process">
+                        <h3>Process</h3>
+                        <div id="step-by-step-container">
+                            <!-- Steps dynamically populated here -->
+                        </div>
+                    </div>
+                </div>
+                
+                
+
+            </div>
+        </div>
+    </main>
+
+    <script>
+        function autoUpdate() {
+            const cipher = document.getElementById('cipher').value;
+            const operation = document.querySelector('button[type="submit"][name="operation"]').value;
+
+            fetch('/update_opposite_result/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+                },
+                body: JSON.stringify({ cipher, operation })
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Update labels
+                document.getElementById('opposite-operation-label').textContent = data.opposite_operation_label;
+                document.getElementById('data-label').textContent = data.data_label;
+
+                // Update result
+                document.getElementById('opposite-result').textContent = data.result;
+
+                // Update steps
+                document.getElementById('step-by-step-container').innerHTML = data.steps.map(step => `<p>${step}</p>`).join('');
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+    </script>
+</body>
+</html>
