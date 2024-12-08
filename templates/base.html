@@ -115,6 +115,38 @@
             padding: 1rem 0;
             margin-top: 2rem;
         }
+
+        /* Bottom Buttons Section */
+.bottom-buttons-container {
+    background: #e9effb;
+    padding: 20px 0;
+    margin: 2rem 0;
+}
+
+.button-group {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.nav-button {
+    text-decoration: none;
+    background-color: white;
+    color: var(--primary);
+    border-radius: 6px;
+    padding: 5px 10px;
+    font-size: 15px;
+    text-align: center;
+    transition: all 0.3s ease;
+    border: 1px solid var(--primary);
+}
+
+.nav-button:hover {
+    background-color: var(--primary-dark);
+    color: white;
+}
+
     </style>
 </head>
 <body>
@@ -151,6 +183,18 @@
 
     <!-- Footer -->
     <footer>
+        <div class="bottom-buttons-container">
+            <span style="margin-left: 20px;">Explore other symmetric ciphers!</span>
+            <div class="button-group">
+                <a href="{% url 'caesar_cipher' %}" class="nav-button">Caesar Cipher</a>
+                <a href="{% url 'vigenere' %}" class="nav-button">Vigenère Cipher</a>
+                <a href="{% url 'playfair_cipher' %}" class="nav-button">Playfair Cipher</a>
+                <a href="{% url 'double_columnar_cipher' %}" class="nav-button">Double Columnar Cipher</a>
+                <a href="{% url 'columnar_cipher' %}" class="nav-button">Single Columnar Cipher</a>
+                <a href="{% url 'aes_cipher' %}" class="nav-button">AES Cipher</a>
+            </div>
+        </div>
+        
         <div class="container">
             <p>&copy; 2024 CipherLab. All Rights Reserved.</p>
         </div>

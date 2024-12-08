@@ -38,12 +38,16 @@
             color: #1747E8;
             font-size: 1.5rem;
             font-weight: 700;
+            color: var(--secondary);
             margin-bottom: 0.5rem;
+            text-align: center; /* Center horizontally */
         }
+
 
         .card-description {
             color: #666;
             font-size: 14px;
+            text-align: center; /* Center horizontally */
         }
 
         .form-group {
@@ -131,15 +135,32 @@
             background: #F8F9FE;
             font-weight: 500;
         }
+        .nav-button {
+            text-decoration: none;
+            background-color: white;
+            color: var(--primary);
+            border-radius: 6px;
+            padding: 5px 10px;
+            font-size: 15px;
+            text-align: center;
+            transition: var(--transition);
+            border: 1px solid var(--primary);
+        }
+
+        .nav-button:hover {
+            background-color: var(--primary-dark);
+            color: white;
+        }
     </style>
 </head>
 <body>
     <div class="container">
+        <div class="card-header">
+            <h1 class="card-title">Double Columnar Transposition Cipher</h1>
+            <p class="card-description">Encrypt and decrypt messages using two keys.</p>
+        </div>
         <div class="card">
-            <div class="card-header">
-                <h1 class="card-title">Double Columnar Transposition Cipher</h1>
-                <p class="card-description">Encrypt and decrypt messages using two keys.</p>
-            </div>
+            
             <div class="dual-container">
                 <!-- Encryption Section -->
                 <div class="card">
@@ -297,9 +318,12 @@
         </div>
             </div>
         </div>
-        
+     
     </div>
     <script src="{% static 'js/double_columnar.js' %}"></script>
+      <!-- Bottom Buttons Section -->
+
 </body>
+
 </html>
 {% endblock %}

@@ -182,6 +182,22 @@
     .process-table tr:nth-child(even) {
         background-color: rgba(255, 255, 255, 0.5);
     }
+    .nav-button {
+        text-decoration: none;
+        background-color: white;
+        color: var(--primary);
+        border-radius: 6px;
+        padding: 5px 10px;
+        font-size: 15px;
+        text-align: center;
+        transition: var(--transition);
+        border: 1px solid var(--primary);
+    }
+
+    .nav-button:hover {
+        background-color: var(--primary-dark);
+        color: white;
+    }
 </style>
 
 <div class="container">
@@ -269,6 +285,7 @@
             <p>Decryption simply reverses these rules. The Playfair cipher is more secure than simpler ciphers but can still be broken with enough ciphertext.</p>
         </div>
     </div>
+    
 </div>
 
 <script>

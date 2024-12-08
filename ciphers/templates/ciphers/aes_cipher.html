@@ -1,0 +1,337 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AES-128 Encryption/Decryption</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    <style>
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+        @media (min-width: 768px) {
+            .grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+        .card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+        .card-title {
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        textarea, input[type="text"] {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #d1d5db;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #2563eb;
+        }
+        .mt-6 {
+            margin-top: 24px;
+        }
+        .space-y-2 > * + * {
+            margin-top: 8px;
+        }
+        .process-container {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #f0f0f0;
+            border-radius: 4px;
+        }
+        .process-step {
+            margin-bottom: 10px;
+        }
+        .process-step strong {
+            font-weight: bold;
+        }
+        .process-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        .process-table th, .process-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        .process-table td {
+            max-width: 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .process-table td:hover {
+            white-space: normal;
+            word-break: break-all;
+        }
+        
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>AES-128 Encryption/Decryption</h1>
+        
+        <div class="grid">
+            <div class="card">
+                <div class="card-title">Encryption</div>
+                <div class="form-group">
+                    <label for="plaintext">Plaintext</label>
+                    <textarea id="plaintext" rows="4"></textarea>
+                </div>
+                <button onclick="handleEncrypt()">Encrypt</button>
+                <div id="encryptedResult" style="display: none;">
+                    <div class="form-group">
+                        <label for="encrypted">Encrypted (Base64)</label>
+                        <textarea id="encrypted" rows="4" readonly></textarea>
+                    </div>
+                </div>
+                <div id="encryptionProcess" class="process-container" style="display: none;"></div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">Decryption</div>
+                <div class="form-group">
+                    <label for="ciphertext">Ciphertext (Base64)</label>
+                    <textarea id="ciphertext" rows="4"></textarea>
+                </div>
+                <button onclick="handleDecrypt()">Decrypt</button>
+                <div id="decryptedResult" style="display: none;">
+                    <div class="form-group">
+                        <label for="decrypted">Decrypted</label>
+                        <textarea id="decrypted" rows="4" readonly></textarea>
+                    </div>
+                </div>
+                <div id="decryptionProcess" class="process-container" style="display: none;"></div>
+            </div>
+        </div>
+
+        <div class="mt-6">
+            <label for="key">Secret Key (16 characters)</label>
+            <input type="text" id="key" maxlength="16">
+        </div>
+
+        <div class="mt-6 space-y-2">
+            <p><strong>Cipher Mode of Encryption:</strong> CBC</p>
+            <p><strong>Padding:</strong> PKCS5Padding</p>
+            <p><strong>Key Size:</strong> 128 bits</p>
+            <p><strong>Output Text Format:</strong> Base64</p>
+        </div>
+        <div class="cipher-description">
+            <h3>How AES (Advanced Encryption Standard) Works</h3>
+            <div style="color: var(--text-light); font-size: 0.875rem;">
+            <p>
+                The Advanced Encryption Standard (AES) is a symmetric encryption algorithm widely used across the world to secure sensitive information. AES replaces older encryption algorithms such as DES (Data Encryption Standard) and is trusted for its strong security, efficiency, and versatility. AES is a block cipher that operates on fixed-size blocks of data (128 bits) and supports key sizes of 128, 192, or 256 bits.
+            </p>
+            <p>To encrypt or decrypt a message with AES:</p>
+            <ul>
+                <li>The input plaintext is divided into 128-bit blocks.</li>
+                <li>A secret key is provided, which is used for both encryption and decryption processes.</li>
+                <li>The plaintext is processed through multiple rounds of substitution, permutation, and key mixing. The number of rounds depends on the selected key size (10 rounds for 128 bits, 12 rounds for 192 bits, and 14 rounds for 256 bits).</li>
+                <li>The ciphertext is generated as a result of these transformations.</li>
+            </ul>
+
+            <p><strong>Decryption reverses the encryption process in the exact reverse order using the same key.</strong></p>
+
+            <div class="flex-container" style="display: flex;">
+                <!-- Encryption Section -->
+                <div class="encryption-process">
+                    <h4>Encryption Process (128-bit Example):</h4>
+                    <p><strong>Plaintext:</strong> HELLO WORLD</p>
+                    <p><strong>Step 1: Initial State with Plaintext and Key</strong></p>
+                    <pre>
+                    Plaintext Input Block: 
+                    01001000 01100101 01101100 01101100 01101111 00100000 
+                    01010111 01101111 01110010 01101100 01100100
+                    </pre>
+                    <p><strong>Step 2: Add Round Key</strong></p>
+                    <pre>Apply initial XOR operation using the AES key.</pre>
+                    <p><strong>Step 3: SubBytes (Substitution Bytes)</strong></p>
+                    <pre>Replace bytes with predefined S-box mappings to introduce non-linearity.</pre>
+                    <p><strong>Step 4: ShiftRows</strong></p>
+                    <pre>Rotate rows of data to mix columns.</pre>
+                    <p><strong>Step 5: MixColumns</strong></p>
+                    <pre>Combine the columns mathematically using finite field operations for diffusion.</pre>
+                    <p><strong>Step 6: Add Round Key</strong></p>
+                    <pre>XOR operation with a unique round key for every round.</pre>
+                    <p>Repeat these steps for 10 rounds (for 128 bits).</p>
+                    <p><strong>Final Ciphertext:</strong> Encrypted bits after 10 rounds of transformations</p>
+                </div>
+
+                <!-- Decryption Section -->
+                <div class="decryption-process" style="margin-left: 30px;">
+                    <h4>Decryption Process:</h4>
+                    <p><strong>Ciphertext:</strong> Encrypted bits</p>
+                    <p><strong>Step 1: Initial State with Ciphertext</strong></p>
+                    <pre>Start with the ciphertext and prepare for AES decryption.</pre>
+                    <p><strong>Step 2: Apply Inverse Operations in Reverse Order</strong></p>
+                    <p><strong>Inverse Add Round Key:</strong></p>
+                    <pre>Subtract the key using XOR (reverse of the encryption key mixing).</pre>
+                    <p><strong>Inverse ShiftRows:</strong></p>
+                    <pre>Revert row shifts.</pre>
+                    <p><strong>Inverse SubBytes:</strong></p>
+                    <pre>Map bytes back using the inverse S-box mappings.</pre>
+                    <p><strong>Inverse MixColumns:</strong></p>
+                    <pre>Perform the inverse finite field transformations on columns.</pre>
+                    <p>Repeat these inverse steps for each round in reverse order.</p>
+                    <p><strong>Final Plaintext:</strong> HELLO WORLD</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    </div>
+
+    <script>
+        const IV_LENGTH = 16; // 16 bytes for AES
+
+        function encryptAES(message, key) {
+            const paddedKey = key.padEnd(16, '\0').slice(0, 16);
+            const iv = CryptoJS.lib.WordArray.random(IV_LENGTH);
+            const encrypted = CryptoJS.AES.encrypt(message, CryptoJS.enc.Utf8.parse(paddedKey), {
+                iv: iv,
+                mode: CryptoJS.mode.CBC,
+                padding: CryptoJS.pad.Pkcs7
+            });
+            const combined = iv.concat(encrypted.ciphertext);
+            return {
+                result: CryptoJS.enc.Base64.stringify(combined),
+                steps: {
+                    paddedKey: paddedKey,
+                    iv: CryptoJS.enc.Hex.stringify(iv),
+                    encrypted: CryptoJS.enc.Base64.stringify(encrypted.ciphertext),
+                    combined: CryptoJS.enc.Base64.stringify(combined)
+                }
+            };
+        }
+
+        function decryptAES(ciphertext, key) {
+            const paddedKey = key.padEnd(16, '\0').slice(0, 16);
+            const combined = CryptoJS.enc.Base64.parse(ciphertext);
+            const iv = CryptoJS.lib.WordArray.create(combined.words.slice(0, IV_LENGTH / 4));
+            const encryptedMessage = CryptoJS.lib.WordArray.create(combined.words.slice(IV_LENGTH / 4));
+            const decrypted = CryptoJS.AES.decrypt(
+                { ciphertext: encryptedMessage },
+                CryptoJS.enc.Utf8.parse(paddedKey),
+                {
+                    iv: iv,
+                    mode: CryptoJS.mode.CBC,
+                    padding: CryptoJS.pad.Pkcs7
+                }
+            );
+            return {
+                result: decrypted.toString(CryptoJS.enc.Utf8),
+                steps: {
+                    paddedKey: paddedKey,
+                    iv: CryptoJS.enc.Hex.stringify(iv),
+                    encryptedMessage: CryptoJS.enc.Base64.stringify(encryptedMessage),
+                    decrypted: decrypted.toString(CryptoJS.enc.Utf8)
+                }
+            };
+        }
+
+
+        function handleEncrypt() {
+            const plaintext = document.getElementById('plaintext').value;
+            const key = document.getElementById('key').value;
+            try {
+                const { result, steps } = encryptAES(plaintext, key);
+                document.getElementById('encrypted').value = result;
+                document.getElementById('ciphertext').value = result;
+                document.getElementById('encryptedResult').style.display = 'block';
+
+                // Display encryption process
+                const processContainer = document.getElementById('encryptionProcess');
+                processContainer.innerHTML = `
+                    <div class="process-step">
+                        <strong>Encryption Process:</strong>
+                        <table class="process-table">
+                            <tr><th>Step</th><th>Value</th></tr>
+                            <tr><td>Padded Key</td><td>${steps.paddedKey}</td></tr>
+                            <tr><td>IV (Hex)</td><td>${steps.iv}</td></tr>
+                            <tr><td>Encrypted (Base64)</td><td>${steps.encrypted}</td></tr>
+                            <tr><td>Combined (IV + Encrypted)</td><td>${steps.combined}</td></tr>
+                        </table>
+                    </div>
+                `;
+                processContainer.style.display = 'block';
+            } catch (error) {
+                alert('Encryption error: ' + error.message);
+            }
+        }
+
+        function handleDecrypt() {
+            const ciphertext = document.getElementById('ciphertext').value;
+            const key = document.getElementById('key').value;
+            try {
+                const { result, steps } = decryptAES(ciphertext, key);
+                document.getElementById('decrypted').value = result;
+                document.getElementById('plaintext').value = result;
+                document.getElementById('decryptedResult').style.display = 'block';
+
+                // Display decryption process
+                const processContainer = document.getElementById('decryptionProcess');
+                processContainer.innerHTML = `
+                    <div class="process-step">
+                        <strong>Decryption Process:</strong>
+                        <table class="process-table">
+                            <tr><th>Step</th><th>Value</th></tr>
+                            <tr><td>Padded Key</td><td>${steps.paddedKey}</td></tr>
+                            <tr><td>IV (Hex)</td><td>${steps.iv}</td></tr>
+                            <tr><td>Encrypted Message (Base64)</td><td>${steps.encryptedMessage}</td></tr>
+                            <tr><td>Decrypted</td><td>${steps.decrypted}</td></tr>
+                        </table>
+                    </div>
+                `;
+                processContainer.style.display = 'block';
+            } catch (error) {
+                alert('Decryption error: ' + error.message);
+            }
+        }
+    </script>
+</body>
+</html>
+
+{% endblock %}

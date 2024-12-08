@@ -180,6 +180,78 @@
             font-size: 28px;
         }
     }
+
+    .learning-section {
+        background: #f9fafb;
+        padding: 40px 20px;
+        border-top: 1px solid #e0e0e0;
+        margin: 40px 0;
+        font-size: 16px;
+        line-height: 1.8;
+        color: #333;
+    }
+
+    .learning-section h2 {
+        text-align: center;
+        margin-bottom: 20px;
+        color: var(--primary-blue);
+        font-size: 32px;
+    }
+
+    /* Grid Layout */
+    .learning-content {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr); /* 3 columns */
+        gap: 20px;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    /* Individual Learning Cards */
+    .learning-card {
+        background: #ffffff;
+        border: 1px solid #d0d0d0;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        padding: 20px;
+        display: flex;
+        gap: 15px;
+        align-items: flex-start;
+        transition: box-shadow 0.3s ease-in-out;
+    }
+
+    .learning-card:hover {
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    .learning-card img {
+        width: 80px;
+        height: 80px;
+        object-fit: contain;
+        border-radius: 8px;
+    }
+
+    .learning-card p {
+        font-size: 15px;
+        line-height: 1.6;
+    }
+
+    /* Responsive Adjustments */
+    @media (max-width: 768px) {
+        .learning-content {
+            grid-template-columns: 1fr; /* Stack vertically on smaller devices */
+        }
+
+        .learning-card {
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .learning-card img {
+            margin-bottom: 10px;
+        }
+    }
 </style>
 
 <main>
@@ -259,7 +331,7 @@
 
             <!-- Panel 6: AES -->
             <div class="team-card">
-                <a href="" class="card-link">
+                <a href="{% url 'aes_cipher' %}" class="card-link">
                     <div class="team-photo">
                         <img src="{% static 'images/aes.png' %}" alt="AES (Advanced Encryption Standard)">
                     </div>
@@ -269,6 +341,58 @@
                         <div class="address">Widely used encryption standard</div>
                     </div>
                 </a>
+            </div>
+        </div>
+    </div>
+    <div class="learning-section">
+        <h2>Learn More About Symmetric Ciphers</h2>
+        <div class="learning-content">
+            <!-- Caesar Cipher -->
+            <div class="learning-card">
+                <img src="{% static 'images/caesar1.png' %}" alt="Caesar Cipher">
+                <div>
+                    <p><strong>Caesar Cipher:</strong> Named after Julius Caesar, this cipher involves shifting each letter by a fixed number of positions. For instance, a shift of 3 replaces 'A' with 'D', 'B' with 'E', and so on. While historically significant, it's one of the simplest forms of encryption and vulnerable to frequency analysis.</p>
+                </div>
+            </div>
+
+            <!-- Vigenère Cipher -->
+            <div class="learning-card">
+                <img src="{% static 'images/vigenere1.png' %}" alt="Vigenère Cipher">
+                <div>
+                    <p><strong>Vigenère Cipher:</strong> A polyalphabetic cipher using a keyword. It avoids patterns in text by using multiple Caesar shifts depending on the keyword's characters. While revolutionary at its time, it was later broken by statistical cryptanalysis techniques but remains a foundational cipher concept.</p>
+                </div>
+            </div>
+
+            <!-- Playfair Cipher -->
+            <div class="learning-card">
+                <img src="{% static 'images/playfair1.png' %}" alt="Playfair Cipher">
+                <div>
+                    <p><strong>Playfair Cipher:</strong> Developed by Charles Wheatstone, this is a digraph substitution cipher that encrypts pairs of letters rather than single letters. It adds complexity by obscuring frequency analysis but still maintains a simple substitution-like approach for encoding.</p>
+                </div>
+            </div>
+
+            <!-- Single Columnar Cipher -->
+            <div class="learning-card">
+                <img src="{% static 'images/single_columnar1.png' %}" alt="Single Columnar Cipher">
+                <div>
+                    <p><strong>Single Columnar Transposition Cipher:</strong> This transposition cipher writes plaintext in a single column and rearranges the text according to a key. It effectively scrambles the text order, offering basic encryption by permuting positions without changing the text itself.</p>
+                </div>
+            </div>
+
+            <!-- Double Columnar Cipher -->
+            <div class="learning-card">
+                <img src="{% static 'images/double_columnar1.png' %}" alt="Double Columnar Cipher">
+                <div>
+                    <p><strong>Double Columnar Transposition Cipher:</strong> An improvement upon the Single Columnar Cipher, this technique uses two permutations instead of one. The text is first rearranged by one key and then again with another. This two-layered scrambling makes it much harder to break without the appropriate keys.</p>
+                </div>
+            </div>
+
+            <!-- AES -->
+            <div class="learning-card">
+                <img src="{% static 'images/aes1.png' %}" alt="AES (Advanced Encryption Standard)">
+                <div>
+                    <p><strong>AES (Advanced Encryption Standard):</strong> AES is the most widely used symmetric-key algorithm today. It supports 128-bit, 192-bit, and 256-bit keys and is employed in most modern cryptographic security protocols, including HTTPS, VPNs, and secure communications worldwide. AES is fast, secure, and highly efficient.</p>
+                </div>
             </div>
         </div>
     </div>

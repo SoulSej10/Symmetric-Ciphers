@@ -37,12 +37,14 @@
         font-weight: 700;
         color: var(--secondary);
         margin-bottom: 0.5rem;
-}
+        text-align: center; /* Center horizontally */
+    }
+
 
     .card-description {
         color: #666;
-        margin: 0;
         font-size: 14px;
+        text-align: center; /* Center horizontally */
     }
 
     .form-group {
@@ -130,15 +132,35 @@
         background: #F8F9FE;
         font-weight: 500;
     }
-</style>
+    .nav-button {
+        text-decoration: none;
+        background-color: white;
+        color: var(--primary);
+        border-radius: 6px;
+        padding: 5px 10px;
+        font-size: 15px;
+        text-align: center;
+        transition: var(--transition);
+        border: 1px solid var(--primary);
+    }
+
+    .nav-button:hover {
+        background-color: var(--primary-dark);
+        color: white;
+    }
+    </style>
 
 <div class="container">
+    <div class="card-header">
+        <h1 class="card-title">Single Columnar Transposition Cipher</h1>
+        <p class="card-description">Encrypt and decrypt messages using one key.</p>
+    </div>
     <div class="dual-container">
         <!-- Encryption Section -->
         <div class="card">
             <div class="card-header">
-                <h1 class="card-title">Single Columnar Cipher - Encryption</h1>
-                <p class="card-description">Encrypt your message using the Columnar Cipher.</p>
+                <h1 class="card-title">Encryption</h1>
+                <p class="card-description">Encrypt your message using the Single Columnar Cipher.</p>
             </div>
             <form method="POST">
                 {% csrf_token %}
@@ -199,8 +221,8 @@
         <!-- Decryption Section -->
         <div class="card">
             <div class="card-header">
-                <h1 class="card-title">Single Columnar Cipher - Decryption</h1>
-                <p class="card-description">Decrypt a message using the Columnar Cipher.</p>
+                <h1 class="card-title">Decryption</h1>
+                <p class="card-description">Decrypt a message using the Single Columnar Cipher.</p>
             </div>
             <form method="POST">
                 {% csrf_token %}

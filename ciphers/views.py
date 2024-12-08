@@ -485,6 +485,10 @@ def double_columnar_cipher(request):
    return render(request, "ciphers/double_columnar_cipher.html")
 
 
+#MARK: AES
+def aes_cipher(request):
+   return render(request, "ciphers/aes_cipher.html")
+
 
 #MARK: TEAM
 def myTeam(request):

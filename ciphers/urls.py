@@ -14,5 +14,7 @@ urlpatterns = [
 
     path('double-columnar/', views.double_columnar_cipher, name="double_columnar_cipher"),
 
+    path('aes_cipher/', views.aes_cipher, name="aes_cipher"),
+
     path('myteam/', views.myTeam, name='myteam'),
 ]
