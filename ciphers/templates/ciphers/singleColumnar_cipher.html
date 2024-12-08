@@ -1,0 +1,282 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Single Columnar Cipher{% endblock %}
+
+{% block content %}
+
+<style>
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    }
+
+    .dual-container {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 24px;
+        margin-top: 20px;
+    }
+
+    .card {
+        background: white;
+        border-radius: 12px;
+        padding: 24px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+
+    .card-header {
+        margin-bottom: 24px;
+    }
+
+    .card-title {
+        color: #1747E8;
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--secondary);
+        margin-bottom: 0.5rem;
+}
+
+    .card-description {
+        color: #666;
+        margin: 0;
+        font-size: 14px;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        color: #333;
+        font-weight: 500;
+    }
+
+    textarea, input[type="text"] {
+        width: 95%;
+        padding: 12px;
+        border: 1px solid #E1E1E1;
+        border-radius: 8px;
+        font-size: 14px;
+        transition: border-color 0.2s;
+    }
+
+    textarea:focus, input[type="text"]:focus {
+        outline: none;
+        border-color: #1747E8;
+    }
+
+    .button-group {
+        display: flex;
+        gap: 12px;
+    }
+
+    button {
+        padding: 12px 24px;
+        border-radius: 8px;
+        font-size: 14px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    button[type="submit"] {
+        background: #1747E8;
+        color: white;
+        border: none;
+    }
+
+    button[type="submit"]:hover {
+        background: #1238C4;
+    }
+
+    .result-box {
+        margin-top: 24px;
+        padding: 16px;
+        background: #F8F9FE;
+        border-radius: 8px;
+    }
+
+    .result-box h3 {
+        color: #1747E8;
+        margin: 0 0 12px 0;
+        font-size: 16px;
+    }
+
+    .result-box p {
+        margin: 0;
+        color: #333;
+        font-size: 14px;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 12px;
+        font-size: 14px;
+    }
+
+    th, td {
+        padding: 8px;
+        text-align: center;
+        border: 1px solid #E1E1E1;
+    }
+
+    th {
+        background: #F8F9FE;
+        font-weight: 500;
+    }
+</style>
+
+<div class="container">
+    <div class="dual-container">
+        <!-- Encryption Section -->
+        <div class="card">
+            <div class="card-header">
+                <h1 class="card-title">Single Columnar Cipher - Encryption</h1>
+                <p class="card-description">Encrypt your message using the Columnar Cipher.</p>
+            </div>
+            <form method="POST">
+                {% csrf_token %}
+                <input type="hidden" name="action" value="encrypt">
+                <div class="form-group">
+                    <label for="message">Message</label>
+                    <textarea id="message" name="message" placeholder="Enter message to encrypt..." rows="4" required>{{ decrypted_message }}</textarea>
+                </div>
+                <div class="form-group">
+                    <label for="key">Key</label>
+                    <input id="key" name="key" placeholder="Enter encryption key..." type="text" value="{{ key }}" required>
+                </div>
+                <div class="button-group">
+                    <button type="submit">Encrypt</button>
+                </div>
+            </form>
+
+            {% if encrypted_message %}
+            <div class="result-box">
+                <h3>Encrypted Message</h3>
+                <p>{{ encrypted_message }}</p>
+            </div>
+            {% endif %}
+            
+            {% if cipher_grid %}
+            <div class="result-box">
+                <h3>Cipher Grid</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Order</th>
+                            {% for char in key %}
+                            <th>{{ char }}</th>
+                            {% endfor %}
+                        </tr>
+                        <tr>
+                            <th></th>
+                            {% for num in order %}
+                            <th>{{ num }}</th>
+                            {% endfor %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for row in cipher_grid %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            {% for cell in row %}
+                            <td>{{ cell }}</td>
+                            {% endfor %}
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Decryption Section -->
+        <div class="card">
+            <div class="card-header">
+                <h1 class="card-title">Single Columnar Cipher - Decryption</h1>
+                <p class="card-description">Decrypt a message using the Columnar Cipher.</p>
+            </div>
+            <form method="POST">
+                {% csrf_token %}
+                <input type="hidden" name="action" value="decrypt">
+                <div class="form-group">
+                    <label for="encrypted_message">Encrypted Message</label>
+                    <textarea id="encrypted_message" name="message" placeholder="Enter message to decrypt..." rows="4" required>{{ encrypted_message }}</textarea>
+                </div>
+                <div class="form-group">
+                    <label for="key">Key</label>
+                    <input id="key" name="key" placeholder="Enter decryption key..." type="text" value="{{ key }}" required>
+                </div>
+                <div class="button-group">
+                    <button type="submit">Decrypt</button>
+                </div>
+            </form>
+
+            {% if decrypted_message %}
+            <div class="result-box">
+                <h3>Decrypted Message</h3>
+                <p>{{ decrypted_message }}</p>
+            </div>
+            {% endif %}
+            {% if cipher_grid %}
+            <div class="result-box">
+                <h3>Cipher Grid</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Order</th>
+                            {% for char in key %}
+                            <th>{{ char }}</th>
+                            {% endfor %}
+                        </tr>
+                        <tr>
+                            <th></th>
+                            {% for num in order %}
+                            <th>{{ num }}</th>
+                            {% endfor %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for row in cipher_grid %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            {% for cell in row %}
+                            <td>{{ cell }}</td>
+                            {% endfor %}
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    <div class="cipher-description">
+        <h3>How Single Columnar Cipher Works</h3>
+        <div style="color: var(--text-light); font-size: 0.875rem;">
+            <p>The Single Columnar Cipher is a transposition cipher that rearranges the letters of the plaintext by writing them in a single column and then reading them off in a specific order determined by a key. It relies on permuting the positions of characters in a systematic way.</p>
+            <p>For example, if the plaintext is written vertically in a single column with a defined number of columns specified by a key, rearrangement of columns results in encryption:</p>
+            <pre>
+            Message:    P L A C E   T H E   B A L L
+            Key Order:   O R D E R
+            Encrypted text:  AHLCELP_BLTAE__
+            </pre>
+            <p>To encrypt a message:</p>
+            <ul>
+                <li>Write the plaintext into a single column with spaces grouped using a defined number of columns specified by a key.</li>
+                <li>Rearrange the letters using the defined order of the transposition key.</li>
+            </ul>
+            <p>Decryption reverses this process by rearranging back the ciphertext based on the same columnar reordering defined by the key.</p>
+            <p>Although simple and easy to implement, the single columnar cipher can be vulnerable to cryptanalysis if the structure of the columns or pattern becomes known.</p>
+        </div>
+    </div>
+    
+</div>
+
+    {% endblock %}

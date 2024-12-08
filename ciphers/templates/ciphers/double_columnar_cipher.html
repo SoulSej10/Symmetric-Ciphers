@@ -1,0 +1,305 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Double Columnar Transposition Cipher</title>
+    <style>
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+
+        .dual-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+            margin-top: 20px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-header {
+            margin-bottom: 24px;
+        }
+
+        .card-title {
+            color: #1747E8;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .card-description {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 500;
+        }
+
+        textarea, input[type="text"] {
+            width: 95%;
+            padding: 12px;
+            border: 1px solid #E1E1E1;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.2s;
+        }
+
+        textarea:focus, input[type="text"]:focus {
+            outline: none;
+            border-color: #1747E8;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 12px;
+        }
+
+        button {
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        button[type="submit"] {
+            background: #1747E8;
+            color: white;
+            border: none;
+        }
+
+        button[type="submit"]:hover {
+            background: #1238C4;
+        }
+
+        .result-box {
+            margin-top: 24px;
+            padding: 16px;
+            background: #F8F9FE;
+            border-radius: 8px;
+        }
+
+        .result-box h3 {
+            color: #1747E8;
+            margin: 0 0 12px 0;
+            font-size: 16px;
+        }
+
+        .result-box p {
+            margin: 0;
+            color: #333;
+            font-size: 14px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 12px;
+            font-size: 14px;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: center;
+            border: 1px solid #E1E1E1;
+        }
+
+        th {
+            background: #F8F9FE;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <div class="card-header">
+                <h1 class="card-title">Double Columnar Transposition Cipher</h1>
+                <p class="card-description">Encrypt and decrypt messages using two keys.</p>
+            </div>
+            <div class="dual-container">
+                <!-- Encryption Section -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Encryption</h2>
+                    </div>
+                    <div>
+                        <div class="form-group">
+                            <label for="plaintext">Plaintext</label>
+                            <input id="plaintext" type="text" placeholder="Enter plaintext">
+                        </div>
+                        <div class="form-group">
+                            <label for="encryptKey1">Key 1</label>
+                            <input id="encryptKey1" type="text" placeholder="Enter first key">
+                        </div>
+                        <div class="form-group">
+                            <label for="encryptKey2">Key 2</label>
+                            <input id="encryptKey2" type="text" placeholder="Enter second key">
+                        </div>
+                        <button id="encryptBtn" type="submit">Encrypt</button>
+                        <div class="form-group">
+                            <label for="ciphertext">Ciphertext</label>
+                            <input id="ciphertext" type="text" readonly>
+                        </div>
+                        <div id="encryptionSteps" class="card" style="display: none;">
+                            <div class="card-header">
+                                <h2 class="card-title">Encryption Process</h2>
+                            </div>
+                            <div class="card-content">
+                                <h3>Step 1: First Transposition</h3>
+                                <div id="step1Grid"></div>
+                                <p id="step1Result"></p>
+                                <h3>Step 2: Second Transposition</h3>
+                                <div id="step2Grid"></div>
+                                <p id="step2Result"></p>
+                            </div>
+                        </div>        
+                    </div>
+                </div>
+
+                <!-- Decryption Section -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Decryption</h2>
+                    </div>
+                    <div>
+                        <div class="form-group">
+                            <label for="decryptCiphertext">Ciphertext</label>
+                            <input id="decryptCiphertext" type="text" placeholder="Enter ciphertext">
+                        </div>
+                        <div class="form-group">
+                            <label for="decryptKey1">Key 1</label>
+                            <input id="decryptKey1" type="text" placeholder="Enter first key">
+                        </div>
+                        <div class="form-group">
+                            <label for="decryptKey2">Key 2</label>
+                            <input id="decryptKey2" type="text" placeholder="Enter second key">
+                        </div>
+                        <button id="decryptBtn" type="submit">Decrypt</button>
+                        <div class="form-group">
+                            <label for="decryptedText">Decrypted Text</label>
+                            <input id="decryptedText" type="text" readonly>
+                        </div>
+                        <div id="decryptionSteps" class="card" style="display: none;">
+                            <div class="card-header">
+                                <h2 class="card-title">Decryption Process</h2>
+                            </div>
+                            <div class="card-content">
+                                <h3>Step 1: Inverse Second Transposition</h3>
+                                <div id="decryptStep1Grid"></div>
+                                <p id="decryptStep1Result"></p>
+                                <h3>Step 2: Inverse First Transposition</h3>
+                                <div id="decryptStep2Grid"></div>
+                                <p id="decryptStep2Result"></p>
+                            </div>
+                        </div>
+        
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="cipher-description">
+            <h3>How Double Columnar Cipher Works</h3>
+            <div style="color: var(--text-light); font-size: 0.875rem;">
+                <p>The Double Columnar Cipher is an advanced transposition cipher that builds on the Single Columnar Cipher by applying two separate columnar transpositions in sequence. It provides additional security by permuting the plaintext multiple times using two unique keys.</p>
+                
+                <p>To encrypt a message with the Double Columnar Cipher:</p>
+                <ul>
+                    <li>Write the plaintext into a grid defined by a number of columns specified by the first key.</li>
+                    <li>Apply the first columnar transposition based on the order defined by the first key.</li>
+                    <li>Apply a second columnar transposition to the resulting ciphertext using the second key.</li>
+                </ul>
+                <p>Decryption reverses this process in the inverse order: first reversing the second columnar transposition and then the first transposition.</p>
+                <div style="display: flex;">
+                <div>
+                <h4>Encryption Process:</h4>
+                <p><strong>Plaintext:</strong> HELLO WORLD</p>
+                
+                <p><strong>Step 1: First Transposition (Key 3 1 2)</strong></p>
+                <pre>
+                3   1   2
+                H   E   L
+                L   O   _
+                W   O   R
+                L   D   _
+                </pre>
+                
+                <p>Result after first transposition:</p>
+                <pre>
+                E O O D L _ R H L W L
+                </pre>
+                
+                <p><strong>Step 2: Second Transposition (Key 2 3 1)</strong></p>
+                <pre>
+                2   3   1
+                E   O   O
+                D   L   _
+                R   _   H
+                L   W   L
+                </pre>
+                
+                <p><strong>Final Ciphertext:</strong> O_HLEDRLOL_W</p>
+                
+            </div>
+                <div style="margin-left: 200px;">
+                <h4>Decryption Process:</h4>
+
+                <p><strong>Ciphertext:</strong> O_HLEDRLOL_W</p>
+                
+                <p><strong>Step 1: Inverse Second Transposition (Key 2 3 1)</strong></p>
+                <pre>
+                2   3   1
+                E   O   O
+                D   L   _
+                R   _   H
+                L   W   L
+                </pre>
+                
+                <p>Result after reversing second transposition:</p>
+                <pre>
+                E O O D L R H L W L
+                </pre>
+                
+                <p><strong>Step 2: Inverse First Transposition (Key 3 1 2)</strong></p>
+                <pre>
+                3   1   2
+                H   E   L
+                L   O   _
+                W   O   R
+                L   D   _
+                </pre>
+                
+                <p><strong>Final Plaintext:</strong> HELLO WORLD</p>
+            </div>
+        </div>
+            </div>
+        </div>
+        
+    </div>
+    <script src="{% static 'js/double_columnar.js' %}"></script>
+</body>
+</html>
+{% endblock %}

@@ -73,7 +73,7 @@
     }
 
     select, input, textarea {
-        width: 100%;
+        width: 95%;
         padding: 0.75rem;
         border-radius: 6px;
         border: 1px solid var(--border);
@@ -223,12 +223,12 @@
                 {% csrf_token %}
                 <div class="form-group">
                     <label for="text">Text</label>
-                    <textarea id="text" name="text" rows="4" required>{{ text|default:"" }}</textarea>
+                    <textarea id="text" name="text" rows="4" placeholder="Enter text to encrypt or decrypt..." required>{{ text|default:"" }}</textarea>
                 </div>
 
                 <div class="form-group">
                     <label for="shift">Key</label>
-                    <input id="shift" name="shift" type="text" value="{{ shift|default:"" }}" required>
+                    <input id="shift" name="shift" type="text" placeholder="Enter the number of shifts..." value="{{ shift|default:"" }}" required>
                 </div>
 
                 <div class="button-group">

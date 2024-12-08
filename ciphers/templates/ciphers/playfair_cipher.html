@@ -1,0 +1,384 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Playfair Cipher{% endblock %}
+
+{% block content %}
+<style>
+    :root {
+        --primary: #2563eb;
+        --primary-dark: #1d4ed8;
+        --secondary: #1e40af;
+        --background: #f8faff;
+        --text: #1e3a8a;
+        --text-light: #4b5563;
+        --border: #e5e9f5;
+        --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        --transition: all 0.3s ease;
+    }
+
+    body {
+        font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        background-color: var(--background);
+        color: var(--text);
+        line-height: 1.5;
+    }
+
+    .container {
+        max-width: 1200px;
+        margin: 2rem auto;
+        padding: 0 1rem;
+    }
+
+    .dual-container {
+        display: flex;
+        gap: 2rem;
+        flex-wrap: wrap;
+    }
+
+    .card {
+        background-color: white;
+        border-radius: 12px;
+        box-shadow: var(--shadow);
+        padding: 2rem;
+        flex: 1 1 400px;
+    }
+
+    .card-header {
+        text-align: center;
+        margin-bottom: 1.5rem;
+    }
+
+    .card-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--secondary);
+        margin-bottom: 0.5rem;
+
+    }
+
+    .card-description {
+        color: var(--primary);
+        font-size: 0.875rem;
+    }
+
+    .form-group {
+        margin-bottom: 1rem;
+    }
+
+    label {
+        display: block;
+        font-size: 0.875rem;
+        font-weight: 500;
+        margin-bottom: 0.5rem;
+    }
+
+    input, textarea {
+        width: 95%;
+        padding: 0.75rem;
+        border-radius: 6px;
+        border: 1px solid var(--border);
+        font-size: 1rem;
+        transition: var(--transition);
+    }
+
+    input:focus, textarea:focus {
+        outline: none;
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    }
+
+    .button-group {
+        display: flex;
+        gap: 1rem;
+        margin-top: 1.5rem;
+    }
+
+    button {
+        flex: 1;
+        background-color: var(--primary);
+        color: white;
+        padding: 0.75rem 1rem;
+        border-radius: 6px;
+        border: none;
+        cursor: pointer;
+        font-weight: 600;
+        font-size: 1rem;
+        transition: var(--transition);
+    }
+
+    button:hover {
+        background-color: var(--primary-dark);
+    }
+
+    .result-box {
+        background: linear-gradient(135deg, #f1f5ff, #ffffff);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 1.5rem;
+        margin-top: 1.5rem;
+    }
+
+    .result-box h3 {
+        font-size: 1.125rem;
+        font-weight: 600;
+        margin-top: 0;
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .result-box h3::before {
+        content: "";
+        display: inline-block;
+        width: 4px;
+        height: 1rem;
+        background-color: var(--primary);
+        border-radius: 2px;
+    }
+
+    .result-box p {
+        font-family: 'Fira Code', monospace;
+        background-color: rgba(255, 255, 255, 0.5);
+        padding: 1rem;
+        border-radius: 6px;
+        margin: 0;
+        word-break: break-all;
+    }
+
+    @media (max-width: 768px) {
+        .dual-container {
+            flex-direction: column;
+        }
+    }
+
+
+    .process-box {
+        margin-top: 1.5rem;
+        background: linear-gradient(135deg, #f1f5ff, #ffffff);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 1.5rem;
+    }
+
+    .process-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 1rem;
+    }
+
+    .process-table th, .process-table td {
+        border: 1px solid var(--border);
+        padding: 0.5rem;
+        text-align: center;
+    }
+
+    .process-table th {
+        background-color: var(--primary);
+        color: white;
+    }
+
+    .process-table tr:nth-child(even) {
+        background-color: rgba(255, 255, 255, 0.5);
+    }
+</style>
+
+<div class="container">
+    <div class="dual-container">
+        <div class="card">
+            <div class="card-header">
+                <h1 class="card-title">Playfair Symmetric Cipher</h1>
+                <p class="card-description">Encryption and Decryption</p>
+            </div>
+
+            <form id="cipherForm" method="POST" action="{% url 'playfair_cipher' %}">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="key">Enter Key (5x5 Grid without 'J'):</label>
+                    <input type="text" id="key" name="key" placeholder="Enter key (5x5 grid)" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="text">Enter Text:</label>
+                    <textarea id="text" name="text" rows="4" placeholder="Enter text to encrypt or decrypt" required ></textarea>
+                </div>
+
+                <div class="button-group">
+                    <button type="button" onclick="handleCipher('encrypt')">Encrypt</button>
+                    <button type="button" onclick="handleCipher('decrypt')" style="background-color: white; color: var(--primary);
+                    border: 1px solid var(--primary);">Decrypt</button>
+                </div>
+            </form>
+
+            <div class="result-box">
+                <h3>Result</h3>
+                <p id="resultText">Your encrypted/decrypted text will appear here.</p>
+            </div>
+        </div>
+
+        <!-- Opposite Operation Card -->
+        <div class="card">
+            <div class="card-header">
+                <h1 class="card-title">Opposite Operation</h1>
+                <p class="card-description">The result of the opposite operation</p>
+            </div>
+            <div class="operation-label">
+                <h3 id="opposite-operation-label">Encrypt</h3>
+                <p id="data-label" style="display: none;">Encrypted text:</p>
+            </div>
+
+            <div class="result-box">
+                <h3>Result</h3>
+                <p id="opposite-result">The opposite operation result will appear here.</p>
+            </div>
+            <div class="process-box" style="display: none;">
+                <h3>Encryption Process</h3>
+                <table id="processTable" class="process-table">
+                    <thead>
+                        <tr>
+                            <th>Pair</th>
+                            <th>Rule</th>
+                            <th>Result</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="cipher-description">
+        <h3>How Playfair Works</h3>
+        <div style="color: var(--text-light); font-size: 0.875rem;">
+            <p>The Playfair cipher is a digraph substitution cipher that encrypts pairs of letters using a 5x5 grid. The grid is filled with a keyword, followed by the remaining letters of the alphabet (excluding 'J'). The letters 'I' and 'J' are treated as the same letter.</p>
+            <p>For example, with the key "MONARCH", the grid might look like this:</p>
+            <pre>
+            M O N A R
+            C D E F G
+            H I K L P
+            Q S T U V
+            W X Y Z B
+            </pre>
+            <p>To encrypt a message, the text is split into digraphs (pairs of letters). If there are repeating letters, an 'X' is inserted between them. The cipher follows these rules:</p>
+            <ul>
+                <li><strong>Same row:</strong> Replace with the letters immediately to the right.</li>
+                <li><strong>Same column:</strong> Replace with the letters immediately below.</li>
+                <li><strong>Different row and column:</strong> Form a rectangle and swap the letters at the opposite corners.</li>
+            </ul>
+            <p>Decryption simply reverses these rules. The Playfair cipher is more secure than simpler ciphers but can still be broken with enough ciphertext.</p>
+        </div>
+    </div>
+</div>
+
+<script>
+let lastKey = '';
+let lastResult = '';
+
+function getCSRFToken() {
+    const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+    return csrfToken;
+}
+
+function handleCipher(operation) {
+    const form = document.getElementById('cipherForm');
+    const key = document.getElementById('key').value;
+    const text = document.getElementById('text').value;
+
+    lastKey = key;
+    const data = new FormData(form);
+    data.append('operation', operation);
+    data.append('key', key);
+    data.append('text', text);
+
+    fetch(form.action, {
+        method: 'POST',
+        body: data,
+        headers: {
+            'X-CSRFToken': getCSRFToken(),
+        },
+    })
+    .then(response => response.json())
+    .then(data => {
+        document.getElementById('resultText').textContent = data.result; // Show encryption/decryption
+        lastResult = data.result;
+        updateOppositeOperation(operation);
+        
+        // Display the encryption process
+        const processBox = document.querySelector('.process-box');
+        const processTable = document.getElementById('processTable').querySelector('tbody');
+        
+        if (operation === 'encrypt' && data.process && data.process.length > 0) {
+            processTable.innerHTML = '';
+            data.process.forEach(step => {
+                const row = processTable.insertRow();
+                row.insertCell(0).textContent = step.pair;
+                row.insertCell(1).textContent = step.rule;
+                row.insertCell(2).textContent = step.result;
+            });
+            processBox.style.display = 'block';
+        } else {
+            processBox.style.display = 'none';
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+}
+
+function updateOppositeOperation(operation) {
+    const oppositeOperation = (operation === 'encrypt') ? 'decrypted version' : 'encrypted version';
+    document.getElementById('opposite-operation-label').textContent = oppositeOperation.charAt(0).toUpperCase() + oppositeOperation.slice(1);
+    document.getElementById('data-label').textContent = (operation === 'encrypt') ? 'Encrypted text:' : 'Decrypted text:';
+
+    const data = {
+        key: lastKey,
+        text: lastResult,
+        operation: oppositeOperation
+    };
+
+    fetch("{% url 'playfair_cipher' %}", {
+        method: 'POST',
+        body: JSON.stringify(data),
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCSRFToken(), 
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        // Clean 'X' artifacts from the decrypted result
+        const cleanedResult = cleanDecryptedText(data.result);
+        document.getElementById('opposite-result').textContent = cleanedResult;
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+}
+
+// Logic to clean decrypted text (remove trailing X padding or repeated artifacts)
+function cleanDecryptedText(text) {
+    let cleanedText = '';
+    let i = 0;
+
+    while (i < text.length) {
+        if (i + 1 < text.length && text[i] === 'X' && (text[i - 1] === text[i + 1])) {
+            // Skip artifacts related to repeated digraphs
+            i++;
+        } else if (text[i] === 'X' && i === text.length - 1) {
+            // Handle trailing single X at end
+            break;
+        } else {
+            cleanedText += text[i];
+            i++;
+        }
+    }
+
+    return cleanedText;
+}
+
+
+</script>
+
+
+{% endblock %}
